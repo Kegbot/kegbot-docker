@@ -1,0 +1,31 @@
+version: '2'
+services:
+  redis:
+    image: redis
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+  db:
+    image: mysql
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ~/tmp/kegbot/db:/var/lib/mysql:rw
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+  server:
+    build: ./server
+    links:
+      - db:db.docker
+      - redis:redis.docker
+    volumes:
+      - ~/tmp/kegbot/server:/kegbot/server
+    environment:
+      - KEGBOT_DB_HOST=db.docker
+      - KEGBOT_REDIS_HOST=redis.docker
+      - KEGBOT_SETTINGS_DIR=/etc/kegbot/
+    ports:
+      - "8000"
