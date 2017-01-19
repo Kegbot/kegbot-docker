@@ -5,8 +5,8 @@ Docker support for Kegbot.
 ## Quick start
 
  Requirements:
-* Docker 1.12+
-* Docker-compose 1.9+
+* [Docker](https://docs.docker.com/engine/installation/) 1.12+
+* [Docker-compose](https://docs.docker.com/compose/install/) 1.9+
 
 To start Kegbot:
 ```bash
@@ -19,7 +19,7 @@ To stop Kegbot:
 $ docker-compose down
 ```
 
-Data is saved in `~/tmp/kegbot` folder on the local disk so that restarts don't wipe it.
+Data is saved in `~/tmp/kegbot` folder on the local disk to prevent data loss during restarts.
 You can create a symbolic link should you choose to save the data somewhere else.
 
 
