@@ -1,11 +1,11 @@
 version: '2'
 services:
   redis:
-    image: redis
+    build: ./redis
     expose:
       - "6379"
   db:
-    image: mysql
+    build: ./mysql
     expose:
       - "3306"
     volumes:

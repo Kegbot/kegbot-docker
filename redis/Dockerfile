@@ -1,4 +1,2 @@
-# kegbot/redis dockerfile
-
 # Base image.
-FROM dockerfile/redis
+FROM redis:3-alpine
