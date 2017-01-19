@@ -18,12 +18,20 @@ services:
       - db:db.docker
       - redis:redis.docker
     volumes:
-      - ~/tmp/kegbot/server:/kegbot/server
+      - ~/tmp/kegbot/server:/kegbot-data:rw
     environment:
       - KEGBOT_DB_HOST=db.docker
       - KEGBOT_REDIS_HOST=redis.docker
       - KEGBOT_SETTINGS_DIR=/etc/kegbot/
       - KEGBOT_DB_PASS=kebgot-db-pass
       - KEGBOT_DEBUG='true'
+    expose:
+      - "8000"
+  nginx:
+    build: ./nginx
+    links:
+      - server:kegbot.docker
+    volumes:
+      - ~/tmp/kegbot/server:/kegbot-data:ro
     ports:
-      - "8000:8000"
+      - "80:80"
