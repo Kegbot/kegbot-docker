@@ -15,15 +15,6 @@ do_mysql() {
 ### Main routines
 
 setup_env() {
-  # Copy host information from docker links, if present.
-  if [ -n "${MYSQL_PORT_3306_TCP_ADDR}" ]; then
-    export KEGBOT_DB_HOST="${MYSQL_PORT_3306_TCP_ADDR}"
-    export KEGBOT_DB_PORT="${MYSQL_PORT_3306_TCP_PORT}"
-  fi
-  if [ -n "${REDIS_PORT_6379_TCP_ADDR}" ]; then
-    export KEGBOT_REDIS_HOST="${REDIS_PORT_6379_TCP_ADDR}"
-    export KEGBOT_REDIS_PORT="${REDIS_PORT_6379_TCP_PORT}"
-  fi
 
   # Set defaults
   if [ -z "${KEGBOT_DB_NAME}" ]; then
@@ -43,7 +34,6 @@ setup_env() {
     export KEGBOT_REDIS_PORT=6379
   fi
 
-
   if [ -z "${KEGBOT_SETTINGS_DIR}" ]; then
     export KEGBOT_SETTINGS_DIR=/etc/kegbot/
   fi
@@ -56,8 +46,9 @@ setup_env() {
     die "Must set KEGBOT_REDIS_HOST or REDIS_PORT_6379_TCP_{ADDR,PORT}"
   fi
 
-  export KEGBOT_SETTINGS_DIR=/kegbot-settings
   export C_FORCE_ROOT=True   ## needed by celery
+
+  env
 }
 
 wait_for_mysql() {

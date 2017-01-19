@@ -4,18 +4,14 @@ services:
     image: redis
     expose:
       - "6379"
-    ports:
-      - "6379:6379"
   db:
     image: mysql
     expose:
       - "3306"
-    ports:
-      - "3306:3306"
     volumes:
       - ~/tmp/kegbot/db:/var/lib/mysql:rw
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=kebgot-db-pass
   server:
     build: ./server
     links:
@@ -27,5 +23,7 @@ services:
       - KEGBOT_DB_HOST=db.docker
       - KEGBOT_REDIS_HOST=redis.docker
       - KEGBOT_SETTINGS_DIR=/etc/kegbot/
+      - KEGBOT_DB_PASS=kebgot-db-pass
+      - KEGBOT_DEBUG='true'
     ports:
-      - "8000"
+      - "8000:8000"
