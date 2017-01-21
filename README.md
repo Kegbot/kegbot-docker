@@ -1,26 +1,27 @@
 # Kegbot on Docker
 
-Docker support for Kegbot.  Bit of a work in progress.
+Docker support for Kegbot.  
 
 ## Quick start
 
+ Requirements:
+* [Docker](https://docs.docker.com/engine/installation/) 1.12+
+* [Docker-compose](https://docs.docker.com/compose/install/) 1.9+
+
+To start Kegbot:
+```bash
+$ docker-compose up
 ```
-### Create the data directory somewhere on the host.
-export KEGBOT_DATA=/tmp/kegbot-data
-mkdir -p $KEGBOT_DATA
 
-### Run the containers.
-docker run --detach --name=kegbot-mysql kegbot/mysql
+To stop Kegbot:
 
-docker run --detach --name=kegbot-redis kegbot/redis
-
-docker run --detach --name=kegbot-server -v $KEGBOT_DATA:/kegbot-data \
-    --link kegbot-redis:redis --link kegbot-mysql:mysql \
-    kegbot/server:latest
-
-docker run --name=kegbot-nginx -v $KEGBOT_DATA:/kegbot-data -p 80:80 \
-    --detach --link kegbot-server:kegbot_server kegbot/nginx:latest
+```bash
+$ docker-compose down
 ```
+
+Data is saved in `~/tmp/kegbot` folder on the local disk to prevent data loss during restarts.
+You can create a symbolic link should you choose to save the data somewhere else.
+
 
 ## Credit
 

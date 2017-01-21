@@ -1,4 +1,2 @@
-# kegbot/mysql Dockerfile
-
 # Base image
-FROM orchardup/mysql
+FROM mysql:8

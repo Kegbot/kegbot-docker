@@ -1,12 +1,8 @@
-# dockerfile/nginx Dockerfile
+FROM nginx:1.11-alpine
 
-# Base image
-FROM dockerfile/nginx
-
-ADD kegbot-nginx.conf.tmpl /etc/nginx/sites-available/kegbot.tmpl
-ADD run.sh /run.sh
-RUN chmod 700 /run.sh
+ADD kegbot.conf /etc/nginx/conf.d/default.conf
+ADD nginx.conf /etc/nginx/nginx.conf
 
 VOLUME  ["/kegbot-data"]
 EXPOSE  80
-CMD     ["/run.sh"]
+

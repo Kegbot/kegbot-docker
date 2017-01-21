@@ -15,15 +15,6 @@ do_mysql() {
 ### Main routines
 
 setup_env() {
-  # Copy host information from docker links, if present.
-  if [ -n "${MYSQL_PORT_3306_TCP_ADDR}" ]; then
-    export KEGBOT_DB_HOST="${MYSQL_PORT_3306_TCP_ADDR}"
-    export KEGBOT_DB_PORT="${MYSQL_PORT_3306_TCP_PORT}"
-  fi
-  if [ -n "${REDIS_PORT_6379_TCP_ADDR}" ]; then
-    export KEGBOT_REDIS_HOST="${REDIS_PORT_6379_TCP_ADDR}"
-    export KEGBOT_REDIS_PORT="${REDIS_PORT_6379_TCP_PORT}"
-  fi
 
   # Set defaults
   if [ -z "${KEGBOT_DB_NAME}" ]; then
@@ -43,6 +34,10 @@ setup_env() {
     export KEGBOT_REDIS_PORT=6379
   fi
 
+  if [ -z "${KEGBOT_SETTINGS_DIR}" ]; then
+    export KEGBOT_SETTINGS_DIR=/etc/kegbot/
+  fi
+
   # Verify mandatory variables.
   if [ -z "${KEGBOT_DB_HOST}" ]; then
     die "Must set KEGBOT_DB_HOST or MYSQL_PORT_3306_TCP_{ADDR,PORT}"
@@ -51,15 +46,16 @@ setup_env() {
     die "Must set KEGBOT_REDIS_HOST or REDIS_PORT_6379_TCP_{ADDR,PORT}"
   fi
 
-  export KEGBOT_SETTINGS_DIR=/kegbot-settings
   export C_FORCE_ROOT=True   ## needed by celery
+
+  env
 }
 
 wait_for_mysql() {
+  nc -z $KEGBOT_DB_HOST $KEGBOT_DB_PORT || sleep 30
   if ! do_mysql "${KEGBOT_DB_NAME}" -e "show tables"; then
     do_mysql -e "create database ${KEGBOT_DB_NAME};"
-    kegbot syncdb --all --noinput -v 0
-    kegbot migrate --all --fake --noinput -v 0
+    kegbot migrate --noinput -v 0
     do_mysql "${KEGBOT_DB_NAME}" -e "show tables"
   fi
 }
@@ -83,7 +79,7 @@ run_all() {
   setup_env
 
   wait_for_mysql
-  wait_for_redis
+  #wait_for_redis
 
   maybe_setup_kegbot
   ls -ld /kegbot-data
@@ -93,3 +89,4 @@ run_all() {
 }
 
 run_all
+
