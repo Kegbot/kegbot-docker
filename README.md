@@ -2,6 +2,8 @@
 
 Docker support for Kegbot.  
 
+[![CircleCI](https://circleci.com/gh/Kegbot/kegbot-docker.svg?style=svg)](https://circleci.com/gh/Kegbot/kegbot-docker)
+
 ## Quick start
 
  Requirements:

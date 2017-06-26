@@ -1,0 +1,8 @@
+machine:
+  services:
+    - docker
+
+compile:
+  override:
+    - make all
+
