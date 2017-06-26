@@ -13,7 +13,7 @@ RUN  apk add curl \
      && ls -la /tmp/ \
      && cp -r /tmp/kegbot-server-${KEGBOT_VERSION}/* /app/ \
      && apk add gcc musl-dev \
-     && apk add libjpeg-turbo libjpeg-turbo-dev libjpeg openjpeg \
+     && apk add zlib-dev libjpeg-turbo libjpeg-turbo-dev libjpeg openjpeg \
      && apk add mysql-client \
      && apk add mariadb-dev \
      && ls -la ./ \
