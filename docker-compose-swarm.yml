@@ -1,0 +1,42 @@
+version: '3.1'
+services:
+  redis:
+    image: kegbot/redis
+    ports: ["6379:6379"]
+    networks:
+      default:
+        aliases:
+          - redis.docker
+  db:
+    image: kegbot/mysql
+    ports: ["3306:3306"]
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=kebgot-db-pass
+    networks:
+      default:
+        aliases:
+          - db.docker
+  server:
+    image: kegbot/server
+    volumes:
+      - server:/kegbot-data
+    environment:
+      - KEGBOT_DB_HOST=db.docker
+      - KEGBOT_REDIS_HOST=redis.docker
+      - KEGBOT_SETTINGS_DIR=/etc/kegbot/
+      - KEGBOT_DB_PASS=kebgot-db-pass
+      - KEGBOT_DEBUG='true'
+    ports: ["8000:8000"]
+    networks:
+      default:
+        aliases:
+          - kegbot.docker
+  nginx:
+    image: kegbot/nginx
+    volumes:
+      - server:/kegbot-data
+    ports:
+      - "80:80"
+volumes: {db: null, server: null}
